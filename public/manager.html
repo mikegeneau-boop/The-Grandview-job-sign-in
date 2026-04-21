@@ -1,0 +1,36 @@
+<!DOCTYPE html><html><body>
+<h2>Manager Login</h2>
+<input id="pw" placeholder="Password"><button onclick="login()">Enter</button>
+<div id="app" style="display:none;">
+<h3>Logs</h3><table border="1" id="t"></table>
+</div>
+
+<script>
+function login(){
+ fetch('/login',{method:'POST',headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({password:pw.value})})
+ .then(r=>r.json()).then(d=>{
+   if(d.success){
+     document.getElementById('app').style.display='block';
+     load();
+   } else alert("Wrong password");
+ });
+}
+
+function load(){
+ fetch('/logs').then(r=>r.json()).then(data=>{
+   let html="<tr><th>Name</th><th>Company</th><th>Trade</th><th>Action</th></tr>";
+   data.forEach((r,i)=>{
+     html+=`<tr><td>${r.name}</td><td>${r.company}</td><td>${r.trade}</td><td>${r.action}</td>
+     <td><button onclick="del(${i})">X</button></td></tr>`;
+   });
+   document.getElementById('t').innerHTML=html;
+ });
+}
+
+function del(i){
+ fetch('/delete',{method:'POST',headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({index:i})}).then(load);
+}
+</script>
+</body></html>

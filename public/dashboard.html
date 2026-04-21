@@ -1,1 +1,24 @@
-<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width, initial-scale=1'><style>body{font-family:Arial;padding:20px;}.company{margin-top:20px;}</style></head><body><h2>Currently On Site</h2><div id='content'></div><script>function load(){fetch('/status').then(res=>res.json()).then(data=>{const container=document.getElementById('content');container.innerHTML='';const groups={};data.forEach(person=>{if(!groups[person.company]){groups[person.company]=[];}groups[person.company].push(person.name);});for(const company in groups){const div=document.createElement('div');div.className='company';const title=document.createElement('h3');title.innerText=`${company} (${groups[company].length})`;div.appendChild(title);const ul=document.createElement('ul');groups[company].forEach(name=>{const li=document.createElement('li');li.innerText=name;ul.appendChild(li);});div.appendChild(ul);container.appendChild(div);}});}setInterval(load,5000);load();</script></body></html>
+<!DOCTYPE html><html><body>
+<h2>On Site</h2><div id="c"></div>
+<script>
+function load(){
+ fetch('/status').then(r=>r.json()).then(d=>{
+   const c=document.getElementById('c');
+   if(d.length===0){c.innerHTML="SITE IS EMPTY";return;}
+   c.innerHTML="";
+   const g={};
+   d.forEach(p=>{
+     if(!g[p.company])g[p.company]=[];
+     g[p.company].push(p);
+   });
+   for(let k in g){
+     let html="<h3>"+k+" ("+g[k].length+")</h3><ul>";
+     g[k].forEach(p=>html+="<li>"+p.name+" - "+p.trade+"</li>");
+     html+="</ul>";
+     c.innerHTML+=html;
+   }
+ });
+}
+setInterval(load,5000);load();
+</script>
+</body></html>
