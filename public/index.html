@@ -1,5 +1,87 @@
-<!doctype html><html><head><meta charset='utf-8'><title>Sign In</title><link rel='stylesheet' href='style.css'></head><body>
-<div class='card'><h1>Job Site Sign In</h1><input id='name' placeholder='Full Name'><input id='date' type='date'>
-<select id='trade' size='8'><option>Electrician</option><option>Plumber</option><option>Drywall</option><option>Painter</option><option>HVAC</option><option>Carpenter</option><option>Labourer</option><option>Other</option></select>
-<div class='row'><button onclick="submitSign('IN')">Sign In</button><button onclick="submitSign('OUT')">Sign Out</button></div><p id='msg'></p></div>
-<script src='app.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grandview Job Site Sign-In</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:20px;text-align:center}
+.container{max-width:520px;margin:0 auto;background:#fff;padding:24px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+h2{margin-top:0;color:#333}
+input,select,button{width:100%;padding:14px;margin:10px 0;font-size:17px;border-radius:8px;box-sizing:border-box}
+input,select{border:1px solid #ccc;background:#fff} select{overflow-y:auto}
+button{border:none;color:#fff;font-weight:700;cursor:pointer}
+.signin{background:#2e7d32}.signout{background:#c62828}
+#msg{min-height:28px;margin-top:12px;font-weight:700}
+.success{color:#2e7d32}.error{color:#c62828}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Grandview Job Site Sign-In</h2>
+<input id="name" placeholder="Full Name" required>
+<input id="company" placeholder="Company" required>
+<select id="trade" required size="10">
+<option value="">-- Select Trade --</option>
+<option>Other</option>
+<option>Lanca</option>
+<option>Aluminum entrances</option>
+<option>Asphalt paving</option>
+<option>Caulking</option>
+<option>Concrete Finisher</option>
+<option>Curbs & sidewalks</option>
+<option>Door hardware</option>
+<option>Drywall and Steel stud framing</option>
+<option>Electrical</option>
+<option>Elevator system</option>
+<option>Exterior specialties</option>
+<option>Fence</option>
+<option>Finish carpentry</option>
+<option>Flooring</option>
+<option>Formwork</option>
+<option>Framing</option>
+<option>Glazing</option>
+<option>Hollow metal</option>
+<option>Hollowcore</option>
+<option>HVAC</option>
+<option>Interior specialties</option>
+<option>Landscaping</option>
+<option>Masonry</option>
+<option>Millwork</option>
+<option>Misc metals</option>
+<option>Paint</option>
+<option>Plumbing</option>
+<option>Railings</option>
+<option>Reinforcing steel</option>
+<option>Residential equipment</option>
+<option>Retaining walls</option>
+<option>Roofing</option>
+<option>Rough carpentry</option>
+<option>Siding</option>
+<option>Siteworks & site services</option>
+<option>Solid surfaces</option>
+<option>Structural steel</option>
+<option>Thermal protection</option>
+<option>Toppings</option>
+<option>Vinyl windows</option>
+<option>Waterproofing</option>
+</select>
+<button class="signin" onclick="send('Sign In')">SIGN IN</button>
+<button class="signout" onclick="send('Sign Out')">SIGN OUT</button>
+<div id="msg"></div>
+</div>
+<script>
+function send(action){
+ const name=document.getElementById('name').value.trim();
+ const company=document.getElementById('company').value.trim();
+ const trade=document.getElementById('trade').value;
+ const msg=document.getElementById('msg');
+ if(!name||!company||!trade){msg.textContent='Please fill in all fields';msg.className='error';return;}
+ fetch('/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,company,trade,action})})
+ .then(r=>r.json())
+ .then(()=>{msg.textContent='✓ '+action+' Successful';msg.className='success';})
+ .catch(()=>{msg.textContent='Saved locally - server unavailable';msg.className='error';});
+}
+</script>
+</body>
+</html>
