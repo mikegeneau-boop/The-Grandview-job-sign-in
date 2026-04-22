@@ -1,0 +1,2 @@
+window.onload=()=>{document.getElementById('date').value=new Date().toISOString().split('T')[0];}
+async function submitSign(action){const g=id=>document.getElementById(id); const name=g('name').value.trim(),trade=g('trade').value,date=g('date').value; if(!name||!trade)return alert('Enter name and select trade'); await fetch('/api/sign',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,trade,action,date})}); g('msg').textContent='Saved. Refreshing...'; setTimeout(()=>location.reload(),3000);}
